@@ -1,0 +1,26 @@
+# Core app dependencies
+streamlit
+pandas
+numpy
+sentence-transformers
+torch
+huggingface-hub
+
+# NLP preprocessing
+nltk
+contractions
+num2words
+
+# Document parsing
+PyPDF2
+python-docx
+
+# Data profiling & Kaggle access (used in notebook)
+ydata-profiling
+kagglehub
+
+# Optional: if you later need scikit-learn utilities uncomment below
+# scikit-learn
+
+# After installing, remember to download NLTK resources:
+# python -c "import nltk; [nltk.download(p) for p in ['punkt','averaged_perceptron_tagger','wordnet','omw-1.4','stopwords']]"
