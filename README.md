@@ -60,9 +60,9 @@ streamlit run app.py
   - Search jobs by resume
   - Search resumes by job
   - Match job with resume (one-to-one)
-  - Datasets used : [Resume](https://www.kaggle.com/datasets/snehaanbhawal/resume-dataset) | [Jobs](https://www.kaggle.com/datasets/ravindrasinghrana/job-description-dataset)
 
 ## Notes
 - Default models include: `all-mpnet-base-v2`, `paraphrase-MiniLM-L6-v2`, `paraphrase-mpnet-base-v2`, `all-MiniLM-L6-v2`
 - App requires token entry even for public models to keep behavior consistent
+- Datasets used : [Resume](https://www.kaggle.com/datasets/snehaanbhawal/resume-dataset) | [Jobs](https://www.kaggle.com/datasets/ravindrasinghrana/job-description-dataset)
 
