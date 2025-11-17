@@ -1,6 +1,7 @@
 # Resume Screening Using NLP
 
 Semantic search app to match resumes and job descriptions using Sentence-Transformers and cosine similarity. Includes a Streamlit UI and a notebook for data prep, profiling, and embedding generation.
+Demo link : https://resume-screening-using-nlp-jepby5phpgkbpmokkzs3tc.streamlit.app/
 
 ## Features
 - Semantic matching: resumes ↔ jobs via transformer embeddings
@@ -59,21 +60,9 @@ streamlit run app.py
   - Search jobs by resume
   - Search resumes by job
   - Match job with resume (one-to-one)
-
-## Troubleshooting
-- Missing packages or DLL load errors on Windows:
-  - Ensure Microsoft Visual C++ Redistributable is installed
-  - Reinstall/upgrade key libs: `pip install -U sentence-transformers transformers huggingface-hub`
-  - Install PyTorch following official instructions for your system: https://pytorch.org/get-started/locally/
-- Hugging Face auth/model download errors:
-  - Verify your token and internet access
-  - For offline use, pre-download a model and set the model selector to a local path
-- NLTK resource not found: rerun the NLTK download command above
+  - Datasets used : [Resume](https://www.kaggle.com/datasets/snehaanbhawal/resume-dataset) | [Jobs](https://www.kaggle.com/datasets/ravindrasinghrana/job-description-dataset)
 
 ## Notes
 - Default models include: `all-mpnet-base-v2`, `paraphrase-MiniLM-L6-v2`, `paraphrase-mpnet-base-v2`, `all-MiniLM-L6-v2`
 - App requires token entry even for public models to keep behavior consistent
-- Profiles are saved to `reports/` and the app/notebook creates the folder if missing
 
-## License
-For internal or educational use. Review dataset licenses from Kaggle/Hugging Face before redistribution.
