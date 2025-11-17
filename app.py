@@ -12,6 +12,13 @@ from typing import List, Tuple
 
 # NLP helpers (nltk + num2words)
 import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('punkt_tab')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger_eng')
+nltk.download('averaged_perceptron_tagger')
+
 try:
     from num2words import num2words
 except Exception:
@@ -31,14 +38,18 @@ except Exception:
     Document = None
 
 
-@st.cache_resource
-def load_model(model_name: str = "all-mpnet-base-v2"):
-    from huggingface_hub import login
-    token = os.environ.get("HUGGINGFACEHUB_API_TOKEN") or os.environ.get("HF_TOKEN")
+def load_model(model_name: str = "all-mpnet-base-v2", token: str = None):
     try:
-        return SentenceTransformer(model_name, token=token) if token else SentenceTransformer(model_name)
+        if token:
+            return SentenceTransformer(model_name, token=token)
+        else:
+            return SentenceTransformer(model_name)
     except TypeError:
-        return SentenceTransformer(model_name, use_auth_token=token) if token else SentenceTransformer(model_name)
+        # Fallback for older versions of sentence_transformers
+        if token:
+            return SentenceTransformer(model_name, use_auth_token=token)
+        else:
+            return SentenceTransformer(model_name)
 
 
 def load_saved_models(models_dir = "model\\"):
@@ -227,7 +238,26 @@ def main():
     st.set_page_config(page_title="Resume ↔ Job Matcher", layout="wide")
     st.title("Resume Screening — Semantic Matching")
 
-    st.sidebar.header("Settings")
+    st.sidebar.header("⚙️ Configuration")
+
+    # Require Hugging Face token upfront
+    hf_token = st.sidebar.text_input(
+        "🔑 Hugging Face API Token (required)",
+        type="password",
+        help="Get your token from https://huggingface.co/settings/tokens"
+    ).strip()
+
+    if not hf_token:
+        st.warning("⚠️ Please enter your Hugging Face API token to proceed.")
+        st.info(
+            "You need a Hugging Face account and token to use this app.\n\n"
+            "Steps:\n"
+            "1. Create an account at https://huggingface.co\n"
+            "2. Go to https://huggingface.co/settings/tokens\n"
+            "3. Create a new token (read access is sufficient)\n"
+            "4. Paste it in the field above"
+        )
+        return
 
     mode = st.sidebar.selectbox("Mode", [
         "Search jobs by resume",
@@ -251,7 +281,7 @@ def main():
 
     # Load model (cached)
     with st.spinner("Loading embedding model..."):
-        model = load_model(model_name)
+        model = load_model(model_name, token=hf_token)
 
     # Try to load saved embeddings/data (no UI shown if missing)
     job_embeddings, resume_embeddings, JOB_data, Resume_data = load_saved_models(models_dir)
@@ -289,6 +319,8 @@ def main():
                         q_emb = model.encode(preprocess_text(resume_text), convert_to_tensor=False)
                     except Exception:
                         q_emb = model.encode(resume_text, convert_to_tensor=False)
+
+
                     top = top_k_similarities(q_emb, job_embeddings, top_k=top_k)
                     rows = []
                     for idx, score in top:
